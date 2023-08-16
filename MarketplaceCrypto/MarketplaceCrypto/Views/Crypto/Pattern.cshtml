@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Entities.Models.BinanceData>
+
+<div>
+    <h6>HERE WILL BE LISTED ALL THE COINS</h6>
+    <form asp-action="ListCoins" method="get">
+        <input type="text" name="pattern" placeholder="Search coin" />
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+
+
+
+<table class="table table-sm table-dark">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Last Price</th>
+            <th>Open Price</th>
+            <th>High Price</th>
+            <th>Change for 24h</th>
+            <th>Volume</th>
+            <th>MarketCap</th>
+        </tr>
+    </thead>
+    <tbody id="cryptoData">
+        @foreach (var coin in Model)
+        {
+            <tr>
+                <td><a href="@Url.Action("DetailsBySymbol", "Crypto", new { symbol = coin.Symbol })">@coin.Symbol</a></td>
+                <td>@coin.LastPrice</td>
+                <td>@coin.OpenPrice</td>
+                <td>@coin.HighPrice</td>
+                <td>
+                    @{
+                        var percentage = (coin.LastPrice - coin.OpenPrice) / coin.OpenPrice * 100;
+                        @percentage.ToString("0.00")
+                        ;
+                    }
+                    %
+                </td>
+                <td>@coin.Volume</td>
+                <td>@coin.QuoteVolume</td>
+            </tr>
+        }
+    </tbody>
+</table>

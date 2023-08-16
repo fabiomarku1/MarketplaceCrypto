@@ -1,0 +1,94 @@
+﻿@model Shared.DTO.LoginUserDTO
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 320px;
+            text-align: center;
+        }
+
+            .login-container h4 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+            .login-container input[type="email"],
+            .login-container input[type="password"] {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+            .login-container button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 12px 20px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                .login-container button:hover {
+                    background-color: #0056b3;
+                }
+
+        .validate-message {
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        .register-button {
+            margin-top: 10px;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+
+            .register-button:hover {
+                color: #0056b3;
+            }
+    </style>
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <h4>Login</h4>
+        <form asp-controller="Authentication" asp-action="Login" method="post">
+            <input type="email" placeholder="Email" asp-for="Email" />
+            <input type="password" placeholder="Password" asp-for="Password" />
+            <button type="submit">Login</button>
+        </form>
+        @if (ViewData["ValidateMessage"] != null)
+        {
+            <div class="validate-message">@ViewData["ValidateMessage"]</div>
+        }
+        <div class="register-button" onclick="location.href='@Url.Action("Register", "Authentication")'">Register</div>
+    </div>
+</body>
+</html>

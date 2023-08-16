@@ -1,0 +1,56 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+@*<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+
+<div class="alert alert-danger">
+    <h5>Exception Message</h5>
+    <hr />
+    <p>@ViewBag.ExceptionMessage</p>
+</div>*@
+
+<!-- JavaScript to handle the pop-up alert -->
+<script>
+        alert("@ViewBag.ExceptionMessage");
+</script>
+@*
+<head>
+    <title>Error Popup</title>
+    <style>
+        /* CSS for the popup */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+<div class="popup">
+    <h1>Error</h1>
+    <p>@ViewBag.ExceptionMessage</p>
+    <p>@ViewBag.StackTrace</p>
+    <button onclick="closePopupAndReload()">Close</button>
+</div>
+
+<script>
+        // JavaScript to close the popup and reload the page
+        function closePopupAndReload() {
+            var popup = document.querySelector('.popup');
+            popup.style.display = 'none';
+
+            // Reload the current page
+            window.location.href = '/';
+        }
+    </script>
+</body>
+*@

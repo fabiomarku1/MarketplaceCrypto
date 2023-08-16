@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Entities.Models.BinanceData>
+
+<h2>Watchlist</h2>
+@if (Model is null)
+{
+    <h3>Watchlist is empty!</h3>
+}
+else
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Symbol</th>
+                <th>Last Price</th>
+                <th>Open Price</th>
+                <th>High Price</th>
+                <th>Change for 24h</th>
+                <th>Volume</th>
+                <th>MarketCap</th>
+
+            </tr>
+        </thead>
+        <tbody id="cryptoData">
+
+            @foreach (var coin in Model)
+            {
+            <tr>
+                <td><a href="@Url.Action("DetailsBySymbol", "Crypto", new { symbol = coin.Symbol })">@coin.Symbol</a></td>
+     @*           <td>@coin.Symbol</td>>*@
+                <td>@coin.LastPrice</td>
+                <td>@coin.OpenPrice</td>
+                <td>@coin.HighPrice</td>
+                <td>
+                    @{
+                        var percentage = Math.Abs(coin.LastPrice - coin.OpenPrice) / coin.OpenPrice * 100;
+                        @percentage.ToString("0.00")
+                        ;
+                    }
+                    %
+                </td>
+                <td>@coin.Volume</td>
+                <td>@coin.QuoteVolume</td>
+                @*         <td>
+            <form method="post" asp-page-handler="Delete" asp-route-symbol="@coin.Symbol">
+            <button type="submit" class="btn btn-link">
+            <i class="fas fa-times"></i>
+            </button>
+            </form>
+            </td>*@
+                <td>
+                    <form method="post" asp-action="Remove" asp-route-symbol="@coin.Symbol">
+                        <button type="submit" class="btn btn-primary btn-sm">Remove</button>
+                    </form>
+                </td>
+
+
+            </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+
+
+

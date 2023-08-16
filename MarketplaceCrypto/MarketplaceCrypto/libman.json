@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@microsoft/signalr@6.0.6",
+      "destination": "wwwroot/lib/microsoft/signalr/"
+    },
+    {
+      "library": "chartjs-chart-financial@0.1.1",
+      "destination": "wwwroot/js/chartjs/chartjs-chart-financial/"
+    },
+    {
+      "library": "chartjs@0.3.24",
+      "destination": "wwwroot/js/chartjs/chartjs/"
+    },
+    {
+      "library": "chartjs-plugin-zoom@2.0.1",
+      "destination": "wwwroot/js/chartjs/chartjs-plugin-zoom/"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cryptography", "Cryptography\Cryptography.csproj", "{F97C2146-8A99-4FFA-AB78-16B30F281A13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{511C8BB0-5D9A-48DB-814D-494C6372018C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{DE3BDC69-1FB3-4D90-9B61-3877979D1D2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{546DFCD1-C37E-487A-8DAD-8E5F2C35B2C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{04D10466-8F11-4437-8038-B301E5A46C8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketplaceCrypto", "MarketplaceCrypto\MarketplaceCrypto.csproj", "{CC66D846-E785-4111-9446-57405AF5EF23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F97C2146-8A99-4FFA-AB78-16B30F281A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F97C2146-8A99-4FFA-AB78-16B30F281A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F97C2146-8A99-4FFA-AB78-16B30F281A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F97C2146-8A99-4FFA-AB78-16B30F281A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511C8BB0-5D9A-48DB-814D-494C6372018C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511C8BB0-5D9A-48DB-814D-494C6372018C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511C8BB0-5D9A-48DB-814D-494C6372018C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511C8BB0-5D9A-48DB-814D-494C6372018C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3BDC69-1FB3-4D90-9B61-3877979D1D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3BDC69-1FB3-4D90-9B61-3877979D1D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3BDC69-1FB3-4D90-9B61-3877979D1D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3BDC69-1FB3-4D90-9B61-3877979D1D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{546DFCD1-C37E-487A-8DAD-8E5F2C35B2C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{546DFCD1-C37E-487A-8DAD-8E5F2C35B2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{546DFCD1-C37E-487A-8DAD-8E5F2C35B2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{546DFCD1-C37E-487A-8DAD-8E5F2C35B2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D10466-8F11-4437-8038-B301E5A46C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D10466-8F11-4437-8038-B301E5A46C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D10466-8F11-4437-8038-B301E5A46C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D10466-8F11-4437-8038-B301E5A46C8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC66D846-E785-4111-9446-57405AF5EF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC66D846-E785-4111-9446-57405AF5EF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC66D846-E785-4111-9446-57405AF5EF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC66D846-E785-4111-9446-57405AF5EF23}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91DD2B48-295B-4C65-A354-1306DE4A051B}
+	EndGlobalSection
+EndGlobal

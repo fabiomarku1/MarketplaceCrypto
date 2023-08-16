@@ -1,0 +1,68 @@
+﻿@model List<Entities.Models.BinanceCandlestickData>
+
+<button id="resetButton">Reset Chart Position</button>
+<label>@Html.ViewData.Model[0].Symbol.ToString()</label>
+<canvas id="priceRangeChart" width="800" height="400"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/js/chartjs/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.js"></script>
+<script src="~/js/chartjs/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment"></script>
+
+<script>
+import { Chart } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+Chart.register(zoomPlugin);
+
+</script>
+
+<script>
+    const timestamps = @Html.Raw(Json.Serialize(Model.Select(c => c.Time.ToString("t"))));
+    const prices = @Html.Raw(Json.Serialize(Model.Select(c => c.Close)));
+
+    const ctx = document.getElementById('priceRangeChart').getContext('2d');
+
+   
+    const priceRangeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timestamps,
+            datasets: [{
+                label: 'Price Range',
+                data: prices, 
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                zoom: {
+                    zoom: {
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        mode: 'xy',
+                    }
+                }
+            }
+        }
+    });
+    
+    
+ </script>
+<script>
+        document.getElementById('resetButton').addEventListener('click', function () {
+            resetChartPosition();
+        });
+    function resetChartPosition() {
+        priceRangeChart.resetZoom();
+        priceRangeChart.resetPan();
+    }
+    
+
+</script>

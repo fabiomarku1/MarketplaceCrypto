@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Entities.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<style>
+    .navbar-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .nav-item {
+        margin: 0 15px;
+    }
+    
+    #market {
+        font-size: 20px; 
+        font-weight: bold;
+        padding-right: 300px;
+    }
+</style>
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a id="market" class="nav-link text-dark" asp-area="" asp-controller="Crypto" asp-action="ListCoins" title="Market">MARKET</a>
+        </li>
+        <li class="nav-item">
+            <a id="watchlist" class="nav-link text-dark" asp-area="" asp-controller="Watchlist" asp-action="List" title="Watchlist">WATCHLIST</a>
+        </li>
+        <li class="nav-item">
+            <a id="profile" class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Profile" title="Profile">Hello @UserManager.GetUserName(User)!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="" asp-action="Logout" asp-controller="Authentication" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a id="login" class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Login" title="LOGIN">Login</a>
+        </li>
+    }
+</ul>
+
+<style>
+    .navbar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #login {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        #login:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+</style>
