@@ -1,8 +1,110 @@
 ﻿@model List<Entities.Models.BinanceCandlestickData>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <button id="resetButton">Reset Chart Position</button>
 <label>@Html.ViewData.Model[0].Symbol.ToString()</label>
-<canvas id="priceRangeChart" width="800" height="400"></canvas>
+
+
+<div id="rangeDiv">
+    <a href="@Url.Action("Interval", "Crypto", new {  symbol = Model[0].Symbol.ToString(), interval = "15m" })">
+        <div id="minute" class="range-item" >15m</div>
+    </a>
+    <a href="@Url.Action("Interval", "Crypto", new { symbol = Model[0].Symbol.ToString(), interval = "1h" })">
+        <div id="1h" class="range-item">1H</div>
+    </a>
+    <a href="@Url.Action("Interval", "Crypto", new { symbol = Model[0].Symbol.ToString(), interval = "4h" })">
+        <div id="4h" class="range-item">4H</div>
+    </a>
+    <a href="@Url.Action("Interval", "Crypto", new {  symbol = Model[0].Symbol.ToString(), interval = "1d" })">
+        <div id="1d" class="range-item">1D</div>
+    </a>
+    <a href="@Url.Action("Interval", "Crypto", new { symbol = Model[0].Symbol.ToString(), interval = "1w" })">
+        <div id="1w" class="range-item">1W</div>
+    </a>
+    <label for="datePickerToggle">
+        <span class="calendar-icon">📅</span>
+    </label>
+</div>
+
+<div>
+    <input type="checkbox" id="datePickerToggle">
+    <div class="date-picker-container">
+        <input type="date" id="startTimePicker">
+        <input type="date" id="endTimePicker">
+                <label for="datePickerToggle">
+            <span class="search-icon" id="searchTrigger">🔍</span>
+        </label>
+    </div>
+</div>
+<canvas id="priceRangeChart" width="800" height="350"></canvas>
+
+<style>
+    #rangeDiv {
+        display: flex;
+        padding-top: 10px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none; 
+    }
+
+        #rangeDiv > div {
+            padding: 5px 10px;
+            margin-right: 10px;
+            background-color: lightgray;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    .calendar-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .calendar-icon {
+        font-size: 22px;
+        margin-right: 5px;
+        padding-left: 13px;
+    }
+
+    #datePickerToggle {
+        display: none;
+    }
+
+    .date-picker-container {
+        display: none;
+    }
+
+    #datePickerToggle:checked ~ .date-picker-container {
+        display: block;
+    }
+
+    #startDatePicker,
+    #endDatePicker {
+        padding: 5px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .range-link, .range-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .range-item {
+        padding: 5px 10px;
+        margin-right: 10px;
+        background-color: lightgray;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/chartjs/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.js"></script>
 <script src="~/js/chartjs/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
@@ -10,29 +112,28 @@
 <script src="https://cdn.jsdelivr.net/npm/moment"></script>
 
 <script>
-import { Chart } from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
+    import { Chart } from 'chart.js';
+    import zoomPlugin from 'chartjs-plugin-zoom';
 
-Chart.register(zoomPlugin);
+    Chart.register(zoomPlugin);
 
 </script>
 
 <script>
-    const timestamps = @Html.Raw(Json.Serialize(Model.Select(c => c.Time.ToString("t"))));
+    const timestamps = @Html.Raw(Json.Serialize(Model.Select(c => c.Time.ToString("d MMMM HH:mm"))));
     const prices = @Html.Raw(Json.Serialize(Model.Select(c => c.Close)));
 
     const ctx = document.getElementById('priceRangeChart').getContext('2d');
 
-   
     const priceRangeChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: timestamps,
             datasets: [{
                 label: 'Price Range',
-                data: prices, 
+                data: prices,
                 borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                backgroundColor: 'rgba(13, 180, 185, 1)',
                 borderWidth: 2
             }]
         },
@@ -44,25 +145,63 @@ Chart.register(zoomPlugin);
                             enabled: true,
                         },
                         pinch: {
-                            enabled: true
+                            enabled: true,
+                            mode: 'xy'  
                         },
-                        mode: 'xy',
+                    },
+                    pan: {
+                        enabled: true,
+                        mode: 'xy',  
+                        rangeMin: { x: null }, 
+                        rangeMax: { x: null }  
+                    },
+                    drag: {
+                        enabled: true,
+                        threshold: 10,
                     }
                 }
             }
         }
     });
-    
-    
- </script>
+
+
+</script>
 <script>
-        document.getElementById('resetButton').addEventListener('click', function () {
-            resetChartPosition();
-        });
+    document.getElementById('resetButton').addEventListener('click', function () {
+        resetChartPosition();
+    });
     function resetChartPosition() {
         priceRangeChart.resetZoom();
         priceRangeChart.resetPan();
     }
-    
-
 </script>
+
+<script>
+     const searchTrigger = document.getElementById('searchTrigger');
+     const startTimePicker = document.getElementById('startTimePicker');
+     const endTimePicker = document.getElementById('endTimePicker');
+
+     searchTrigger.addEventListener('click', function () {
+         if (startTimePicker.value && endTimePicker.value) {
+             const startDate = new Date(startTimePicker.value);
+             const endDate = new Date(endTimePicker.value);
+
+    
+             const timeDifference = endDate - startDate;
+
+    
+             const symbol = "@Model[0].Symbol.ToString()";
+
+             if (timeDifference >= 0) {
+               
+                 const url = `@Url.Action("Interval", "Crypto")?symbol=${symbol}&interval=custom&startDate=${startTimePicker.value}&endDate=${endTimePicker.value}`;
+                 window.location.href = url;
+             } else {
+          
+                 alert("Please select a date range within 1 day.");
+             }
+         }
+     });
+</script>
+
+

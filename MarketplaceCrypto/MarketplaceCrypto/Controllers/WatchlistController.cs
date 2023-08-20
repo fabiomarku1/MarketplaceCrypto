@@ -30,7 +30,7 @@ namespace MarketplaceCrypto.Controllers
             var userId=int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             await _serviceManager.WatchlistService.RemoveFromWatchlist(userId, symbol);
-            return RedirectToAction("List", "Watchlist"); // Adjust accordingly
+            return RedirectToAction("List", "Watchlist");
         }
     }
 }

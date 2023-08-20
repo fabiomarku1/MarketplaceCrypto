@@ -12,7 +12,6 @@
     <p>@ViewBag.ExceptionMessage</p>
 </div>*@
 
-<!-- JavaScript to handle the pop-up alert -->
 <script>
         alert("@ViewBag.ExceptionMessage");
 </script>
@@ -43,12 +42,10 @@
 </div>
 
 <script>
-        // JavaScript to close the popup and reload the page
         function closePopupAndReload() {
             var popup = document.querySelector('.popup');
             popup.style.display = 'none';
 
-            // Reload the current page
             window.location.href = '/';
         }
     </script>

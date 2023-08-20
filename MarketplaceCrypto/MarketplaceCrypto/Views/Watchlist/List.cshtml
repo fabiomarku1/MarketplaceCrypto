@@ -32,7 +32,7 @@ else
                 <td>@coin.HighPrice</td>
                 <td>
                     @{
-                        var percentage = Math.Abs(coin.LastPrice - coin.OpenPrice) / coin.OpenPrice * 100;
+                        var percentage =(coin.LastPrice - coin.OpenPrice) / coin.OpenPrice * 100;
                         @percentage.ToString("0.00")
                         ;
                     }
@@ -49,7 +49,7 @@ else
             </td>*@
                 <td>
                     <form method="post" asp-action="Remove" asp-route-symbol="@coin.Symbol">
-                        <button type="submit" class="btn btn-primary btn-sm">Remove</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                     </form>
                 </td>
 

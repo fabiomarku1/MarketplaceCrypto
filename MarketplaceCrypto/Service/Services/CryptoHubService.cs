@@ -11,8 +11,8 @@ public class CryptoHubService:ICryptoHubService
     {
         _hub = hub;
     }
-    public async void UpdateAllCrypto( object message)
+    public async Task UpdateAllCrypto( object message)
     {
-        await _hub.Clients.All.SendAsync("UpdateCryptocurrencies", message);
+        await _hub.Clients.All.SendAsync("UpdateMarket", message);
     }
 }

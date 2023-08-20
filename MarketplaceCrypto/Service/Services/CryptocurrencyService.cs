@@ -32,6 +32,9 @@ public class CryptocurrencyService:ICryptocurrencyService
         if (list is null)
             throw new NotFoundException($"No cryptos were found for the patter {pattern}");
        
+        if(!list.Any())
+            throw new NotFoundException($"No data found for the pattern {pattern}");
+
         var coins = list.Select(i => $"\"{i.Symbol}USDT\"").ToList();
 
         var symbols = string.Join(",", coins);

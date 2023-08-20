@@ -5,23 +5,6 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<style>
-    .navbar-nav {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .nav-item {
-        margin: 0 15px;
-    }
-    
-    #market {
-        font-size: 20px; 
-        font-weight: bold;
-        padding-right: 300px;
-    }
-</style>
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
@@ -52,8 +35,18 @@
 <style>
     .navbar-nav {
         display: flex;
-        align-items: center;
         justify-content: center;
+        align-items: center;
+    }
+
+    .nav-item {
+        margin: 0 15px;
+    }
+
+    #market {
+        font-size: 20px;
+        font-weight: bold;
+        padding-right: 300px;
     }
 
     #login {
@@ -64,8 +57,8 @@
         transition: background-color 0.3s, color 0.3s;
     }
 
-        #login:hover {
-            background-color: #2980b9;
-            color: white;
-        }
+    #login:hover {
+        background-color: #2980b9;
+        color: white;
+    }
 </style>

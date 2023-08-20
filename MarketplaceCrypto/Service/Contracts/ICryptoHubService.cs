@@ -4,6 +4,6 @@ namespace Service.Contracts;
 
 public interface ICryptoHubService
 {
-    void UpdateAllCrypto(object message);
+    Task UpdateAllCrypto(object message);
 
 }

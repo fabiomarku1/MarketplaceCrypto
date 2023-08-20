@@ -38,10 +38,32 @@ namespace MarketplaceCrypto.Controllers
         public async Task<IActionResult> DetailsBySymbol(string symbol)
         {
             var userId=int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+           //     HttpContext.Session.SetString("CryptoSymbol", symbol);
             await _serviceManager.WatchlistService.AddItemToWatchlist(symbol, userId);
 
-            var dataList = await _serviceManager.BinanceService.GetDataForSymbol(symbol);
+            var dataList = await _serviceManager.BinanceService.GetDataForSymbol(symbol,null);
+            if (dataList is null)
+            {
+                throw new NotFoundException("No data list was found for symbol");
+                return View();
+
+            }
+        
+            return View("DetailsBySymbol",dataList.ToList());
+
+        }
+
+
+        public async Task<IActionResult> Interval(string symbol,string interval, DateTime ?startDate, DateTime? endDate)
+        {
+           if(interval.Equals("custom"))
+            {
+                 var data = await _serviceManager.BinanceService.GetDataForCustomRange(symbol,startDate.Value,endDate.Value);
+                   return View("DetailsBySymbol",data.ToList());
+            }
+
+
+            var dataList = await _serviceManager.BinanceService.GetDataForSymbol(symbol,interval);
             if (dataList is null)
             {
                 throw new NotFoundException("No data list was found for symbol");
@@ -49,7 +71,7 @@ namespace MarketplaceCrypto.Controllers
 
             }
 
-            return View(dataList.ToList());
+              return View("DetailsBySymbol",dataList.ToList());
 
         }
 

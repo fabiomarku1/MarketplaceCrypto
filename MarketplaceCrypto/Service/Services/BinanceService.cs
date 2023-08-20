@@ -27,9 +27,9 @@ public class BinanceService : IBinanceService
     }
 
 
-    public async Task<IEnumerable<BinanceData>> GetAllCryptos(string ?sortBy)
+    public async Task<IEnumerable<BinanceData>> GetAllCryptos(string? sortBy)
     {
-        var coins = new List<string>
+        var coins = new List<string> //duhen futur ne db si default dhe te lexon nga aty
         {
             "\"BTCUSDT\"",
             "\"ETHUSDT\"",
@@ -68,15 +68,15 @@ public class BinanceService : IBinanceService
         };
         var binanceDataList = JsonSerializer.Deserialize<List<BinanceData>>(jsonResponse, options);
 
-
+        await _hubService.UpdateAllCrypto(binanceDataList);
         // await _hubContext.Clients.All.SendAsync("UpdateCryptocurrencies", crypto);
-        await _hubContext.Clients.All.SendAsync("UpdateMarket", binanceDataList);
-     //   var timer = new Timer(async _ => await UpdateValues(), null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        //  await _hubContext.Clients.All.SendAsync("UpdateMarket", binanceDataList);
+        //   var timer = new Timer(async _ => await UpdateValues(), null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 
-     if (sortBy is not null)
-     {
-         return await SortData(sortBy, binanceDataList);
-     }
+        if (sortBy is not null)
+        {
+            return await SortData(sortBy, binanceDataList);
+        }
 
         return binanceDataList;
     }
@@ -121,17 +121,79 @@ public class BinanceService : IBinanceService
         };
         var binanceDataList = JsonSerializer.Deserialize<List<BinanceData>>(jsonResponse, options);
 
-      //  var crypto = _mapper.Map<IEnumerable<CryptoCurrency>>(binanceDataList);
+        //  var crypto = _mapper.Map<IEnumerable<CryptoCurrency>>(binanceDataList);
 
-        await _hubContext.Clients.All.SendAsync("updateMarket", binanceDataList);
+        // await _hubContext.Clients.All.SendAsync("updateMarket", binanceDataList);
+        await _hubService.UpdateAllCrypto(binanceDataList);
 
     }
 
-    public async Task<IEnumerable<BinanceCandlestickData>> GetDataForSymbol(string symbol)
+    public async Task<IEnumerable<BinanceCandlestickData>> GetDataForSymbol(string symbol, string? interval)
     {
-        long startTime = new DateTimeOffset(DateTime.Now.Date).ToUnixTimeMilliseconds();
-        var apiUrl = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval=1h&startTime={startTime}";
+        var apiUrl = await GetAPIUrl(symbol, interval);
+        var response = await _httpClient.GetAsync(apiUrl);
 
+        if (!response.IsSuccessStatusCode) return null;
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        List<List<object>> dataLists = JsonSerializer.Deserialize<List<List<object>>>(jsonResponse);
+
+        List<BinanceCandlestickData> candlestickDataList = new List<BinanceCandlestickData>();
+
+        foreach (var dataList in dataLists)
+        {
+            var test = dataList[1].ToString();
+            var candlestickData = new BinanceCandlestickData
+            {
+                Symbol = symbol,
+                Open = decimal.Parse(dataList[1].ToString()),
+                High = decimal.Parse(dataList[2].ToString()),
+                Low = decimal.Parse(dataList[3].ToString()),
+                Close = decimal.Parse(dataList[4].ToString()),
+                Time = DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(dataList[0].ToString())).UtcDateTime
+            };
+
+            candlestickDataList.Add(candlestickData);
+        }
+
+        return candlestickDataList;
+
+    }
+
+
+    public async Task<IEnumerable<BinanceCandlestickData>> GetDataForCustomRange(string symbol, DateTime startTime, DateTime endTime)
+    {
+        var difference = endTime - startTime;
+        var interval = "";
+
+        switch (difference.Days)
+        {
+            case < 2:
+                interval = "15m";
+                break;
+
+            case >= 2 and < 25:
+                interval = "1h";
+                break;
+
+            case >= 25 and < 240:
+                interval = "1w";
+                break;
+
+            case >= 240 and < 500:
+                interval = "1D";
+                break;
+
+            case >= 500:
+                interval = "1M";
+                break;
+            default:
+        }
+        
+        var startRange = new DateTimeOffset(startTime).ToUnixTimeMilliseconds();
+                var endRange = new DateTimeOffset(endTime).ToUnixTimeMilliseconds();
+       
+        var apiUrl = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={startRange}&endTime={endRange}&";
         var response = await _httpClient.GetAsync(apiUrl);
 
         if (!response.IsSuccessStatusCode) return null;
@@ -195,5 +257,29 @@ public class BinanceService : IBinanceService
         return await Task.FromResult(sortedList);
     }
 
+
+    private async Task<string> GetAPIUrl(string symbol, string interval)
+    {
+        long startTime;
+        var apiUrl = "";
+
+        if (interval is null)//default
+        {
+            startTime = new DateTimeOffset(DateTime.Now.AddDays(-2)).ToUnixTimeMilliseconds();
+            return apiUrl = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval=1h&startTime={startTime}";
+        }
+
+        startTime = interval switch
+        {
+            "15m" or "1h" => new DateTimeOffset(DateTime.Now.AddDays(-2)).ToUnixTimeMilliseconds(),
+            "4h" or "1d" => new DateTimeOffset(DateTime.Now.AddDays(-25)).ToUnixTimeMilliseconds(),
+            "1w" => new DateTimeOffset(DateTime.Now.AddMonths(-8)).ToUnixTimeMilliseconds(),
+            _ => new DateTimeOffset(DateTime.Now.AddDays(-2)).ToUnixTimeMilliseconds(),
+        };
+
+        // startTime = new DateTimeOffset(DateTime.Now.AddDays(-1)).ToUnixTimeMilliseconds();
+        apiUrl = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&startTime={startTime}";
+        return apiUrl;
+    }
     #endregion
 }

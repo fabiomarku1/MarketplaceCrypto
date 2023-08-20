@@ -50,7 +50,6 @@ public class JwtUtils : IJwtUtils
         }
         catch
         {
-            // return null and empty if validation fails
             return (null, "", "");
         }
     }
